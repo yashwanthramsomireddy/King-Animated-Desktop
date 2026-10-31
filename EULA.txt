@@ -1,0 +1,92 @@
+KING PETS - SOFTWARE LICENSE AGREEMENT
+Version 1.0.0
+
+Please read this agreement carefully. By selecting "I accept the agreement" and
+installing, or by using King Animated Desktop, you agree to these terms. If you do not agree,
+select "I do not accept" and the installation will stop.
+
+1. LICENSOR
+TeamExyKings, Chennai, India ("Licensor").
+Contact: Yashwanthramsomireddy@gmail.com
+
+2. FREE AND OPEN-SOURCE SOFTWARE
+King Animated Desktop is free of charge and is licensed under the MIT License (full text in
+section 3). Source code: https://github.com/yashwanthramsomireddy/king-animated-desktop
+
+3. MIT LICENSE
+Copyright (c) 2026 TeamExyKings
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in the
+Software without restriction, including without limitation the rights to use, copy,
+modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+and to permit persons to whom the Software is furnished to do so, subject to the
+following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+4. MANDATORY CONSUMER RIGHTS (EU / EEA / UK)
+Nothing in this agreement excludes or limits any right or liability that cannot be
+excluded or limited by law - including statutory consumer rights under the laws of
+your country of residence, and liability for intent, gross negligence, death or
+personal injury, or under mandatory product-liability rules. Where such rules
+apply, they take priority over the disclaimer in section 3.
+
+5. THIRD-PARTY COMPONENTS
+King Animated Desktop includes third-party software under its own licences, in particular the
+Qt framework and PySide6 (GNU LGPL v3) and the Python runtime (PSF License).
+These are NOT covered by the MIT License above. Their notices and licence texts are
+installed with the program (THIRD_PARTY_NOTICES.txt and the "licenses" folder).
+You may replace the Qt/PySide6 libraries with your own modified versions as the
+LGPL allows - see THIRD_PARTY_NOTICES.txt.
+
+6. PRIVACY
+King Animated Desktop collects no personal data and makes no network connections. See
+PRIVACY.txt (also shown during installation and installed with the program).
+
+7. WHAT THE INSTALLER DOES TO YOUR SYSTEM
+  - Copies the program to the folder you choose (default C:\Program Files\King Animated Desktop).
+  - If you tick the options: creates a desktop shortcut, and adds a start-up entry
+    for your Windows account so King Animated Desktop starts when you sign in. You can change
+    this at any time in King Animated Desktop > Settings > General > "Start with Windows".
+  - Creates Start Menu shortcuts and an uninstaller (Settings > Apps).
+  The program draws small always-on-top, click-through windows over your screen. It
+  does not read or modify your files, other programs, or the contents of other windows.
+
+8. TRADEMARKS AND CHARACTERS
+All characters in King Animated Desktop are original, simple drawings. King Animated Desktop is not
+affiliated with or endorsed by any film, comic or game franchise. The names
+"King Animated Desktop" and "TeamExyKings" identify this project; all other names mentioned
+by users belong to their owners.
+
+8A. DONATIONS
+Donations through the PayPal/Razorpay buttons are voluntary gifts to support development.
+They are not a purchase and do not buy goods, services, a licence, support or any feature;
+the Software stays free for everyone. Payments are processed by PayPal or Razorpay under
+their own terms; the Publisher never receives your card or bank details. Where mandatory
+law gives you rights regarding a payment, they are unaffected.
+
+9. NO SUPPORT OBLIGATION
+Support is provided on a voluntary, best-effort basis through
+https://github.com/yashwanthramsomireddy/king-animated-desktop/issues .
+
+10. TERMINATION
+You may stop using the Software and uninstall it at any time. Rights under the MIT
+License continue for as long as you comply with its conditions.
+
+11. GOVERNING LAW
+Subject to section 4 and to any mandatory consumer-protection law of your country
+of residence (which you keep), this agreement is governed by the laws of India. If
+you are a consumer in the EU/EEA you may also bring proceedings in the courts of
+your country of residence.
+
+12. LANGUAGE
+The English text of this agreement is the authoritative version.

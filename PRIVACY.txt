@@ -1,0 +1,94 @@
+KING PETS - PRIVACY NOTICE
+(GDPR - Regulation (EU) 2016/679 - and ePrivacy information)
+Version 1.0.0 - applies to King Animated Desktop 1.0.x
+
+IN SHORT
+King Animated Desktop does not collect, send, sell or share any personal data. It has no
+accounts, no analytics, no telemetry, no advertising, no cookies and no internet
+connection of its own. Everything stays on your computer. The only time personal data
+reaches the Publisher is if YOU choose to donate or e-mail (sections 12 and 13).
+
+1. WHO IS RESPONSIBLE
+TeamExyKings, Chennai, India  (the "Publisher")
+Contact for privacy questions: Yashwanthramsomireddy@gmail.com
+Because the Publisher receives no personal data from the app, there is no
+processing for which the Publisher acts as controller. This notice is provided
+for transparency.
+
+2. WHAT THE APP STORES ON YOUR COMPUTER (only on your device)
+  a) Your settings: %APPDATA%\KingAnimatedDesktop\config.json
+     (chosen objects, sizes, colours, badge text, etc.). Whatever you type as
+     "badge text" is stored only in this file.
+  b) A start-up entry, only if "Start with Windows" is on:
+     HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run  ->  KingAnimatedDesktop
+  c) A temporary lock file (kingdesktop.lock) in your temp folder, so that two copies
+     do not run at once.
+  d) Optional: settings files you choose to export yourself.
+None of this is transmitted anywhere.
+
+3. WHAT THE APP READS LOCALLY (and never stores or sends)
+  - Size and window class of the foreground window - only to hide the pets during
+    full-screen apps/games (setting "Hide while a full-screen app/game is active").
+  - Power status (battery / mains) - only if you enable "Hide when running on
+    battery".
+  - The system clock - only if you enable "quiet hours".
+  - Your monitor layout - to place the pets on screen.
+  This information is used in memory for an instant and is discarded.
+
+4. LEGAL BASIS
+No personal data is processed by the Publisher. Local settings are created at
+your request when you install and use the program (Art. 6(1)(b) / your own
+device). Nothing requires consent under Art. 6(1)(a), and no cookies or similar
+tracking technologies are used (ePrivacy Directive 2002/58/EC, Art. 5(3)).
+
+5. RECIPIENTS AND INTERNATIONAL TRANSFERS
+None. No data leaves your device, so there are no recipients, processors or
+transfers outside the EU/EEA.
+
+6. UPDATES
+King Animated Desktop never checks for updates by itself. New versions are only obtained if you
+download them from https://github.com/yashwanthramsomireddy/king-animated-desktop/releases . Your
+download is then subject to GitHub's own privacy policy, not this app's.
+
+7. RETENTION AND ERASURE ("right to be forgotten")
+Your data lives only on your PC. You can delete it at any time:
+  - Uninstall King Animated Desktop and answer YES when asked "Also delete my settings?"
+    (the uninstaller removes %APPDATA%\KingAnimatedDesktop and the start-up entry), or
+  - delete the folder %APPDATA%\KingAnimatedDesktop yourself.
+Turning off "Start with Windows" in Settings removes the start-up entry.
+
+8. YOUR RIGHTS
+Under GDPR you have the right of access, rectification, erasure, restriction,
+portability and objection, and the right to lodge a complaint with your national
+data protection authority. Because the Publisher holds no data about you, these
+rights are exercised directly by you on your own device as described above. You
+may also write to the contact address above with any question.
+
+9. CHILDREN
+The app collects no data from anyone, including children.
+
+10. SECURITY
+The program has no network functionality and no server component. It does not run
+with elevated rights after installation. Install only from the official
+repository/Releases page and check the installer's digital signature/checksum
+where provided.
+
+12. DONATIONS (OPTIONAL)
+The Info tab has PayPal and Razorpay donate buttons. They only open the provider's
+payment page in your browser when you click. Donating is voluntary and unlocks nothing.
+The Publisher never sees your card/bank/UPI details. From the provider the Publisher
+receives the amount, date, reference and the name/e-mail you gave them, used only to
+acknowledge the donation and keep accounting records (legal basis: legitimate interest
+Art. 6(1)(f) and legal obligation Art. 6(1)(c)); retained as long as Indian accounting/tax
+rules require. PayPal (Luxembourg/USA) and Razorpay (India) may process data outside the
+EU/EEA under their own safeguards and privacy policies.
+
+13. LINKS AND E-MAIL
+Buttons for the website, source code, policies and "Email support" only act when you click
+them, and then open your own browser or e-mail program. If you e-mail the Publisher, your
+address and message are used only to answer you. The same policy is available as web pages
+(privacy-policy.html / terms-of-service.html) bundled with the program.
+
+14. CHANGES
+If a future version ever changes how data is handled, this notice will be updated
+and the change described in CHANGELOG.md before release.

@@ -1,0 +1,53 @@
+KING PETS - THIRD-PARTY SOFTWARE NOTICES
+
+King Animated Desktop itself is MIT-licensed (see LICENSE). The packaged Windows program
+(KingAnimatedDesktop.exe and the _internal folder) also contains the following third-party
+software, each under its own licence.
+
+------------------------------------------------------------------------------
+1. Qt 6 and PySide6 / Shiboken6   (The Qt Company Ltd. and contributors)
+   Licence: GNU Lesser General Public License v3.0 (LGPL-3.0-only)
+   Full text: licenses\LGPL-3.0.txt  (which incorporates licenses\GPL-3.0.txt)
+   Homepage: https://www.qt.io  -  https://doc.qt.io/qtforpython
+   Source code: Qt:       https://download.qt.io/official_releases/qt/
+                PySide6:  https://code.qt.io/cgit/pyside/pyside-setup.git
+                PySide6 is also available from https://pypi.org/project/PySide6/
+
+   Your rights under the LGPL (in plain words):
+   - Qt/PySide6 is used here as unmodified, dynamically-linked libraries
+     (the .dll / .pyd files inside the "_internal" folder).
+   - You may replace them with your own modified or newer build of the same
+     libraries; the program will then use your version. To do that, close King Animated Desktop
+     and replace the corresponding files in "_internal" (for example
+     PySide6\Qt6Core.dll), or run King Animated Desktop from source with
+         pip install -r requirements.txt  &&  python run.py
+     where you can swap in any PySide6 version you like.
+   - Reverse engineering for debugging such modifications is permitted.
+   - We offer, for at least three years after the release you obtained, the
+     complete corresponding source of the Qt/PySide6 parts, on request to
+     Yashwanthramsomireddy@gmail.com (or from the links above).
+   - The LGPL licence terms apply to Qt/PySide6 only; they do not change the
+     MIT licence of King Animated Desktop' own source code.
+
+------------------------------------------------------------------------------
+2. Python runtime   (Python Software Foundation)
+   Licence: Python Software Foundation License Version 2
+   Full text: licenses\Python-PSF-License.txt
+   Homepage: https://www.python.org
+
+------------------------------------------------------------------------------
+3. PyInstaller bootloader   (PyInstaller Development Team)
+   Used to package the program into KingAnimatedDesktop.exe.
+   Licence: GPL-2.0-or-later WITH a special exception that expressly allows the
+   bootloader to be included in programs distributed under any licence.
+   Homepage: https://pyinstaller.org
+
+------------------------------------------------------------------------------
+4. Inno Setup   (Jordan Russell and Martijn Laan)
+   Used to build the installer/uninstaller. Distribution of the generated Setup
+   program is permitted under the Inno Setup licence (https://jrsoftware.org/files/is/license.txt).
+
+------------------------------------------------------------------------------
+Other small libraries bundled automatically by PyInstaller/PySide6 (for example
+zlib, OpenSSL/libpng/freetype/harfbuzz used inside Qt) carry their own permissive
+licences, as listed in the Qt documentation: https://doc.qt.io/qt-6/licenses-used-in-qt.html

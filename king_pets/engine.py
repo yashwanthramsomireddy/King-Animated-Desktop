@@ -10,6 +10,10 @@ from .sprites import REGISTRY
 from .actors import PetActor, BadgeActor, TextActor
 from . import custom  # noqa: F401  (registers hand-coded characters)
 
+# How many slow_tick()s (1s each) between self-heal re-shows of the tray
+# icon. See Engine.refresh_tray() for why this exists.
+TRAY_REFRESH_INTERVAL = 10
+
 
 def tray_icon():
     pm = QPixmap(64, 64); pm.fill(Qt.transparent)
@@ -34,6 +38,8 @@ class Engine:
         self._since_top = 0
         self.rainbow = 0.0
         self.settings_dialog = None
+        self.tray = None
+        self._since_tray_refresh = 0
         self.rebuild()
 
     # ── lifecycle ──
@@ -109,11 +115,42 @@ class Engine:
 
     def slow_tick(self):
         self.check_visibility()
-        c = self.cfg
         self._since_top += 1
-        if c["always_on_top"] and not self.hidden_reason and not self.paused and self._since_top >= c["keep_on_top_interval"]:
+        if self._should_keep_on_top() and self._since_top >= self.cfg["keep_on_top_interval"]:
             self._since_top = 0
             self.keep_on_top()
+        self._since_tray_refresh += 1
+        if self._since_tray_refresh >= TRAY_REFRESH_INTERVAL:
+            self._since_tray_refresh = 0
+            self.refresh_tray()
+
+    def _should_keep_on_top(self):
+        return bool(self.cfg["always_on_top"]) and not self.hidden_reason and not self.paused
+
+    def on_foreground_changed(self):
+        """Hooked up (see platform_utils.install_foreground_hook) to the OS's
+        own foreground-window-change notification. Windows keeps 'always on
+        top' windows in their own z-order band above everything else, but
+        some apps (Explorer, Electron-based apps) assert their own
+        topmost-ness on gaining focus and can land above us within that band.
+        Waiting for the next ~1s poll (see slow_tick) means that app wins the
+        race every time it regains focus; reacting immediately here closes
+        most of that gap. A no-op while hidden/paused/disabled, same as the
+        polled reassertion."""
+        if self._should_keep_on_top():
+            self.keep_on_top()
+            self._since_top = 0
+
+    def refresh_tray(self):
+        """Re-assert the tray icon. Windows forgets every app's tray icon when
+        Explorer restarts/crashes (common after updates or driver resets); the
+        app keeps running but the icon never comes back on its own, leaving no
+        way to reach Settings. Calling show() again is a harmless no-op when
+        the icon is already fine, and restores it when it isn't."""
+        if self.tray is not None:
+            self.tray.show()
+            return True
+        return False
 
     def keep_on_top(self):
         n = 0
@@ -142,6 +179,24 @@ class Engine:
             w.setVisible(not v and not self.hidden_reason)
 
 
+def already_running_notice(background):
+    """Text to show the user when a launch is blocked because another copy
+    is already running. Returns None when nothing should be shown (a silent
+    --background autostart launch losing the race to another autostart is
+    not worth interrupting the user for)."""
+    if background:
+        return None
+    return (
+        C.APP_NAME,
+        f"{C.APP_NAME} is already running.\n\n"
+        "Look for the 'K' icon in your system tray (click the ^ arrow near "
+        "the clock if you don't see it right away) to open Settings.\n\n"
+        "If it's genuinely not there, your tray icons may have reset after "
+        "a recent Explorer restart — the running copy checks and restores "
+        f"its icon automatically within about {TRAY_REFRESH_INTERVAL} seconds.",
+    )
+
+
 def run(open_settings=False, background=False):
     app = QApplication.instance() or QApplication(sys.argv[:1])
     app.setQuitOnLastWindowClosed(False)
@@ -150,6 +205,10 @@ def run(open_settings=False, background=False):
     lock = QLockFile(os.path.join(tempfile.gettempdir(), "kingdesktop.lock"))
     lock.setStaleLockTime(0)
     if not lock.tryLock(200):          # already running (e.g. autostart + manual launch)
+        notice = already_running_notice(background)
+        if notice is not None:
+            from PySide6.QtWidgets import QMessageBox
+            QMessageBox.information(None, *notice)
         return 0
     app.setApplicationName(C.APP_NAME)
     cfg = C.load()
@@ -159,6 +218,8 @@ def run(open_settings=False, background=False):
     if first_run:
         C.save(cfg)
     eng = Engine(app, cfg)
+    PU.install_foreground_hook(eng.on_foreground_changed)
+    app.aboutToQuit.connect(PU.uninstall_foreground_hook)
 
     from .ui import SettingsDialog
 
@@ -180,6 +241,7 @@ def run(open_settings=False, background=False):
     tray.setToolTip(f"{C.APP_NAME} {C.VERSION}")
     tray.activated.connect(lambda r: show_settings() if r in (QSystemTrayIcon.DoubleClick, QSystemTrayIcon.Trigger) else None)
     tray.show()
+    eng.tray = tray
     if open_settings or (first_run and not background):
         QTimer.singleShot(400, show_settings)
     app._king_refs = (eng, tray, menu, lock)          # keep alive

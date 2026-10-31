@@ -115,7 +115,10 @@ def test_themes_and_info_tab():
     assert TH.colors("white", "#00ffd0")["accent"] != "#00ffd0"          # neon darkened for readability on white
     assert TH.colors("pitch-black", "#00ffd0")["bg"] == "#000000"
     txt = dlg.info_dev.text()
-    assert AI.DEV_NAME in txt and AI.EMAIL in txt and AI.BRAND in txt and "Sterling" not in txt
+    # v1.0.1: the Email support button and the mailto row were both removed
+    # from the Info tab, so the e-mail address no longer appears there.
+    assert AI.DEV_NAME in txt and AI.BRAND in txt and "Sterling" not in txt and AI.EMAIL not in txt
+    assert AI.LICENSE_URL in dlg.info_head.text()
     assert dlg.tabs.tabText(dlg.tabs.count() - 1) == "Info"
     eng.clear()
 
@@ -135,4 +138,94 @@ def test_opening_settings_keeps_selection_and_theme_switch_does_not_wipe_it():
     assert on() == ["cat", "penguin", "ufo"], on()
     dlg.apply()
     assert sorted(a.spec.id for a in eng.actors) == ["cat", "penguin", "ufo"]
+    eng.clear()
+
+
+def test_tray_self_heals_after_explorer_restart():
+    # Windows drops every app's tray icon when Explorer restarts/crashes;
+    # the process keeps running but the icon never comes back on its own.
+    # Engine.refresh_tray() re-asserts it periodically so Settings stays
+    # reachable without the user having to kill and relaunch the app.
+    from king_pets.engine import Engine, TRAY_REFRESH_INTERVAL
+
+    class FakeTray:
+        def __init__(self):
+            self.shows = 0
+
+        def show(self):
+            self.shows += 1
+
+    cfg = C.sanitize({})
+    eng = Engine(app, cfg)
+    fake = FakeTray()
+    eng.tray = fake
+
+    # No tray assigned yet -> refresh_tray() is a documented no-op.
+    eng2 = Engine(app, C.sanitize({}))
+    assert eng2.refresh_tray() is False
+    eng2.clear()
+
+    for _ in range(TRAY_REFRESH_INTERVAL - 1):
+        eng.slow_tick()
+    assert fake.shows == 0, "should not refresh before the interval elapses"
+
+    eng.slow_tick()
+    assert fake.shows == 1, "should self-heal exactly at the interval"
+
+    for _ in range(TRAY_REFRESH_INTERVAL):
+        eng.slow_tick()
+    assert fake.shows == 2, "should keep self-healing every interval, not just once"
+    eng.clear()
+
+
+def test_already_running_notice():
+    from king_pets.engine import already_running_notice, TRAY_REFRESH_INTERVAL
+    from king_pets import config as CFG
+
+    # A silent --background autostart launch losing the race to another
+    # autostart attempt isn't worth popping a dialog in the user's face.
+    assert already_running_notice(background=True) is None
+
+    title, text = already_running_notice(background=False)
+    assert title == CFG.APP_NAME
+    assert "tray" in text.lower()
+    assert str(TRAY_REFRESH_INTERVAL) in text
+
+
+def test_foreground_hook_is_safe_noop_off_windows():
+    # This dev/test box isn't Windows, so PU.IS_WIN is False here - these
+    # must degrade to harmless no-ops rather than raising, and real Windows
+    # behaviour (whether the hook actually wins the topmost race against
+    # Explorer/Electron apps) can only be confirmed on a Windows machine.
+    assert PU.install_foreground_hook(lambda: None) is None
+    PU.uninstall_foreground_hook()  # must not raise even with nothing installed
+
+
+def test_on_foreground_changed_reasserts_only_when_appropriate():
+    from king_pets.engine import Engine
+
+    cfg = C.sanitize({})
+    eng = Engine(app, cfg)
+    calls = []
+    eng.keep_on_top = lambda: calls.append(1)
+
+    eng._since_top = 5
+    eng.on_foreground_changed()
+    assert calls == [1], "should reassert immediately on a foreground change"
+    assert eng._since_top == 0, "should reset the poll counter so slow_tick doesn't double up"
+
+    calls.clear()
+    eng.paused = True
+    eng.on_foreground_changed()
+    assert calls == [], "paused -> must not reassert"
+    eng.paused = False
+
+    eng.hidden_reason = "fullscreen"
+    eng.on_foreground_changed()
+    assert calls == [], "hidden (quiet hours/battery/fullscreen) -> must not reassert"
+    eng.hidden_reason = None
+
+    eng.cfg["always_on_top"] = False
+    eng.on_foreground_changed()
+    assert calls == [], "always_on_top disabled -> must not reassert"
     eng.clear()

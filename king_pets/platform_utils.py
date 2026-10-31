@@ -110,6 +110,69 @@ _GWL_EXSTYLE = -20
 _WS_EX_TOOLWINDOW, _WS_EX_NOACTIVATE, _WS_EX_TRANSPARENT, _WS_EX_LAYERED, _WS_EX_TOPMOST = 0x80, 0x08000000, 0x20, 0x80000, 0x8
 
 
+# Keeps the ctypes callback (and the hook handle) alive for the life of the
+# process; if either got garbage-collected the hook would silently stop firing.
+_fg_hook_handle = None
+_fg_hook_proc = None
+
+
+def install_foreground_hook(callback):
+    """Call `callback()` the instant ANY window becomes the foreground window.
+
+    Windows keeps "always on top" windows in their own z-order band above
+    everything else, but that band has its own internal order, and any app
+    that (even briefly) asserts its own topmost-ness on gaining focus -
+    common in Explorer and in Electron-based apps - can land above us in
+    that band. Re-asserting our topmost style on a ~1s poll (see
+    keep_on_top_interval) leaves a window where that app wins the race every
+    time it regains focus. Reacting to the OS's own foreground-change
+    notification instead of waiting for the next poll closes most of that gap.
+
+    No-op (returns None) off Windows, or if the hook can't be installed -
+    the periodic poll in Engine.slow_tick keeps working as the fallback
+    either way, so a failed hook degrades gracefully rather than breaking
+    anything."""
+    global _fg_hook_handle, _fg_hook_proc
+    if not IS_WIN:
+        return None
+    try:
+        import ctypes
+        from ctypes import wintypes
+        EVENT_SYSTEM_FOREGROUND = 0x0003
+        WINEVENT_OUTOFCONTEXT = 0x0000
+        WinEventProcType = ctypes.WINFUNCTYPE(
+            None, wintypes.HANDLE, wintypes.DWORD, wintypes.HWND,
+            wintypes.LONG, wintypes.LONG, wintypes.DWORD, wintypes.DWORD)
+
+        def _proc(hook, event, hwnd, id_object, id_child, thread, event_time):
+            try:
+                callback()
+            except Exception:
+                pass
+
+        proc = WinEventProcType(_proc)
+        handle = ctypes.windll.user32.SetWinEventHook(
+            EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, 0, proc, 0, 0, WINEVENT_OUTOFCONTEXT)
+        if not handle:
+            return None
+        _fg_hook_proc, _fg_hook_handle = proc, handle   # keep alive, see note above
+        return handle
+    except Exception:
+        return None
+
+
+def uninstall_foreground_hook():
+    global _fg_hook_handle, _fg_hook_proc
+    if IS_WIN and _fg_hook_handle:
+        try:
+            import ctypes
+            ctypes.windll.user32.UnhookWinEvent(_fg_hook_handle)
+        except Exception:
+            pass
+    _fg_hook_handle = None
+    _fg_hook_proc = None
+
+
 def force_topmost(hwnd, click_through=True):
     """Put a window above every other window (including other 'always on top' apps) without stealing focus.
     Windows can quietly drop topmost when another app claims it, so the engine calls this about once a second.

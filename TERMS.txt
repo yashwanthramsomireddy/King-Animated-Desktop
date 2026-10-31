@@ -1,0 +1,102 @@
+KING ANIMATED DESKTOP - TERMS OF USE
+Version 1.0.1 - applies to King Animated Desktop 1.0.x
+
+By installing or using King Animated Desktop you agree to these terms. If you
+do not agree, do not install or use it.
+
+1. WHO WE ARE
+TeamExyKings, Chennai, India. Contact: Yashwanthramsomireddy@gmail.com.
+Source code: https://github.com/yashwanthramsomireddy/king-animated-desktop
+
+2. FREE AND OPEN SOURCE
+The program is free of charge and licensed under the MIT License, reproduced
+below. You may use, copy, modify and redistribute it under that licence.
+
+  MIT License
+  Copyright (c) 2026 TeamExyKings
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+
+3. YOUR STATUTORY RIGHTS
+Nothing in these terms excludes or limits any right or liability that cannot
+be excluded or limited by law - including mandatory consumer rights where you
+live (EU/EEA/UK), liability for intent or gross negligence, death or personal
+injury, or mandatory product-liability rules. Those rules take priority over
+the disclaimer above.
+
+4. WHAT THE PROGRAM DOES ON YOUR PC
+It copies files to the folder you choose (default C:\Program Files\King
+Animated Desktop); optionally creates a desktop shortcut and a start-up entry
+for your Windows account; and shows small always-on-top, click-through
+windows above your screen. It does not read or change your files, other
+programs or the contents of other windows. You can change or remove all of
+this in Settings or by uninstalling.
+
+5. USING CUSTOM TEXT
+You are responsible for the text you display. The program only shows it on
+your own screen; it does not upload or publish it.
+
+6. THIRD-PARTY COMPONENTS
+The program includes the Qt framework and PySide6 (GNU LGPL v3), the Python
+runtime (PSF License) and other components under their own licences. They are
+not covered by the MIT licence above. Full notices and licence texts are
+installed with the program (THIRD_PARTY_NOTICES.txt, licenses folder). As the
+LGPL allows, you may replace the Qt/PySide6 libraries with your own build -
+see the notice file.
+
+7. DONATIONS
+  - Donations through the PayPal and Razorpay links on the project website are
+    voluntary gifts to support development. They are not a purchase and do not
+    buy goods, services, a licence, support or any feature - the software
+    stays free for everyone.
+  - Payments are processed by PayPal or Razorpay under their own terms. We
+    never receive your card or bank details. Any refund or dispute is handled
+    with the provider; where mandatory law gives you rights, those are
+    unaffected.
+  - Donations are generally not tax-deductible and no invoice or receipt is
+    issued unless the payment provider provides one.
+  - See PRIVACY.txt for how donation data is handled.
+
+8. TRADEMARKS AND CHARACTERS
+All characters are original, simple drawings and are not affiliated with or
+endorsed by any film, comic or game franchise. The names "King Animated
+Desktop" and "TeamExyKings" identify this project. Other names mentioned by
+users belong to their owners. Windows is a trademark of Microsoft
+Corporation; this project is independent of Microsoft.
+
+9. SUPPORT
+Support is best-effort and voluntary, by e-mail at
+Yashwanthramsomireddy@gmail.com or through GitHub issues:
+https://github.com/yashwanthramsomireddy/king-animated-desktop/issues
+
+10. ENDING USE
+You may stop using and uninstall the program at any time. The MIT licence
+continues for as long as you comply with its conditions.
+
+11. GOVERNING LAW
+Subject to section 3 and to any mandatory consumer-protection law of your
+country of residence (which you keep), these terms are governed by the laws
+of India. If you are a consumer in the EU/EEA you may also bring proceedings
+in the courts of your country of residence.
+
+12. CHANGES AND LANGUAGE
+We may update these terms for new versions; the version line above shows the
+current text. The English text is authoritative.
+
+Provided in good faith for an open-source hobby project; not legal advice.

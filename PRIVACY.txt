@@ -1,6 +1,6 @@
 KING PETS - PRIVACY NOTICE
 (GDPR - Regulation (EU) 2016/679 - and ePrivacy information)
-Version 1.0.0 - applies to King Animated Desktop 1.0.x
+Version 1.0.1 - applies to King Animated Desktop 1.0.x
 
 IN SHORT
 King Animated Desktop does not collect, send, sell or share any personal data. It has no
@@ -74,20 +74,20 @@ repository/Releases page and check the installer's digital signature/checksum
 where provided.
 
 12. DONATIONS (OPTIONAL)
-The Info tab has PayPal and Razorpay donate buttons. They only open the provider's
-payment page in your browser when you click. Donating is voluntary and unlocks nothing.
-The Publisher never sees your card/bank/UPI details. From the provider the Publisher
-receives the amount, date, reference and the name/e-mail you gave them, used only to
-acknowledge the donation and keep accounting records (legal basis: legitimate interest
+The project website (teamexykings.in) has PayPal and Razorpay donate links. They only open
+the provider's payment page in your browser when you click. Donating is voluntary and
+unlocks nothing. The Publisher never sees your card/bank/UPI details. From the provider the
+Publisher receives the amount, date, reference and the name/e-mail you gave them, used only
+to acknowledge the donation and keep accounting records (legal basis: legitimate interest
 Art. 6(1)(f) and legal obligation Art. 6(1)(c)); retained as long as Indian accounting/tax
 rules require. PayPal (Luxembourg/USA) and Razorpay (India) may process data outside the
 EU/EEA under their own safeguards and privacy policies.
 
 13. LINKS AND E-MAIL
-Buttons for the website, source code, policies and "Email support" only act when you click
-them, and then open your own browser or e-mail program. If you e-mail the Publisher, your
-address and message are used only to answer you. The same policy is available as web pages
-(privacy-policy.html / terms-of-service.html) bundled with the program.
+Buttons for the website, source code, Privacy policy and Terms of use only act when you
+click them, and then open your own browser (the policy buttons open this project's GitHub
+repository). The program itself has no "e-mail support" button; if you choose to e-mail the
+Publisher at the contact address above, your address and message are used only to answer you.
 
 14. CHANGES
 If a future version ever changes how data is handled, this notice will be updated

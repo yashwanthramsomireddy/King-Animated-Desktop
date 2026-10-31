@@ -3,7 +3,7 @@ the settings window is generated from it, so adding a setting = adding one line.
 import json, os, sys, copy
 
 APP_NAME = "King Animated Desktop"
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 
 
 def S(key, label, typ, default, group, lo=None, hi=None, choices=None, tip=""):

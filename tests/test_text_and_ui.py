@@ -378,30 +378,29 @@ def test_reset_this_object(dlg):
 
 # ───────────────────────── Info tab ─────────────────────────
 def test_info_tab_has_only_the_necessary_buttons_and_correct_links(dlg):
+    # Email support, Share, Licenses && notices and both donate buttons were
+    # removed from the Info tab (v1.0.1) - only these four direct-link buttons remain.
     texts = {b.text() for b in dlg.tabs.widget(dlg.tabs.count() - 1).findChildren(QPushButton)}
-    assert texts == {"Visit website", "Privacy policy", "Terms of use", "Source code", "Email support",
-                     "Share (copy link)", "Licenses && notices", "Donate with PayPal", "Donate with Razorpay (UPI / cards)"}, texts
+    assert texts == {"Visit website", "Privacy policy", "Terms of use", "Source code"}, texts
     body = dlg.info_dev.text() + dlg.info_head.text()
-    for gone in ("linkedin", "t.me", "telegram", "Report a bug", "releases"):
+    for gone in ("linkedin", "t.me", "telegram", "Report a bug", "releases", "mailto:"):
         assert gone.lower() not in body.lower()
     assert AI.DEV_NAME in dlg.info_dev.text() and "Sterling" not in body
+    # The licence name is now a link straight to the repo's LICENSE file.
+    assert AI.LICENSE_URL in dlg.info_head.text()
     b = dlg.info_buttons
-    b["paypal"].click(); b["razorpay"].click(); b["website"].click(); b["source"].click()
-    assert dlg.opened == ["https://www.paypal.me/yash92duster", "https://rzp.io/rzp/ArAAE3GW",
-                          AI.WEBSITE, "https://github.com/yashwanthramsomireddy/king-animated-desktop"]
-    dlg.opened.clear(); b["support"].click()
-    assert dlg.opened[0].startswith("mailto:" + AI.EMAIL + "?subject=King%20Animated%20Desktop%20Support/Request") or \
-        dlg.opened[0].startswith("mailto:" + AI.EMAIL + "?subject=King%20Animated%20Desktop%20Support%2FRequest")
-    assert "Hi%20Yashwanth" in dlg.opened[0]
-    b["share"].click(); assert QApplication.clipboard().text() == AI.REPO_URL
+    assert set(b) == {"website", "privacy", "terms", "source"}, set(b)
+    b["website"].click(); b["source"].click()
+    assert dlg.opened == [AI.WEBSITE, "https://github.com/yashwanthramsomireddy/king-animated-desktop"]
 
 
-def test_privacy_and_terms_open_bundled_pages(dlg):
+def test_privacy_and_terms_open_the_repo_files(dlg):
+    # v1.0.1: these link straight to the plain-text files in the GitHub repo
+    # (one source of truth) instead of opening a bundled/hosted copy.
     dlg.opened.clear(); dlg.info_buttons["privacy"].click(); dlg.info_buttons["terms"].click()
-    assert dlg.opened[0].endswith("privacy-policy.html") and dlg.opened[1].endswith("terms-of-service.html")
-    assert dlg.opened[0].startswith("file://") and dlg.opened[1].startswith("file://"), dlg.opened   # shipped in the repo/installer
+    assert dlg.opened == [AI.PRIVACY_REPO_URL, AI.TERMS_REPO_URL]
     for u in dlg.opened:
-        assert os.path.exists(u.replace("file://", ""))
+        assert u.startswith(AI.REPO_URL + "/blob/main/")
 
 
 def test_donate_and_legal_texts_mention_what_they_must():

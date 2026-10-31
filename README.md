@@ -31,7 +31,7 @@
 ## Install (Windows 10 / 11)
 
 ### Option A – Installer (recommended)
-Download **[`KingAnimatedDesktop_Setup_1.0.0.exe`](https://github.com/yashwanthramsomireddy/king-animated-desktop/releases/download/v1.0.0/KingAnimatedDesktop_Setup_1.0.0.exe)** (all versions: [Releases](https://github.com/yashwanthramsomireddy/king-animated-desktop/releases)), accept the licence, and click through. It installs to `C:\Program Files\King Animated Desktop`, and offers a **desktop shortcut** and **start with Windows** (both ticked by default).
+Download **[`KingAnimatedDesktop_Setup_1.0.1.exe`](https://github.com/yashwanthramsomireddy/king-animated-desktop/releases/download/v1.0.1/KingAnimatedDesktop_Setup_1.0.1.exe)** (all versions: [Releases](https://github.com/yashwanthramsomireddy/king-animated-desktop/releases)), accept the licence, and click through. It installs to `C:\Program Files\King Animated Desktop`, and offers a **desktop shortcut** and **start with Windows** (both ticked by default).
 
 ### Option B – Run from source
 ```bat
@@ -42,7 +42,7 @@ run_pets.bat          :: installs PySide6 and starts the pets
 or `pip install -r requirements.txt && python run.py --settings`
 
 ### Build the installer yourself
-Double-click **`build_windows_installer.bat`** (installs PyInstaller + Inno Setup via winget if needed) → `dist\KingAnimatedDesktop_Setup_1.0.0.exe`.
+Double-click **`build_windows_installer.bat`** (installs PyInstaller + Inno Setup via winget if needed) → `dist\KingAnimatedDesktop_Setup_1.0.1.exe`.
 Maintainers: pushing a tag like `v1.0.0` makes GitHub Actions build and publish the installer automatically.
 
 ## Using it

@@ -4,7 +4,7 @@ title Build King Animated Desktop installer
 cd /d "%~dp0"
 echo ============================================
 echo  King Animated Desktop - build Windows installer
-echo  Output: dist\KingAnimatedDesktop_Setup_1.0.0.exe
+echo  Output: dist\KingAnimatedDesktop_Setup_1.0.1.exe
 echo ============================================
 echo.
 
@@ -45,11 +45,11 @@ if not exist "dist\KingAnimatedDesktop\KingAnimatedDesktop.exe" (
 
 echo.
 echo [4/4] Building installer...
-"%ISCC%" /DAppVersion=1.0.0 "%~dp0installer\KingAnimatedDesktop.iss"
+"%ISCC%" /DAppVersion=1.0.1 "%~dp0installer\KingAnimatedDesktop.iss"
 if errorlevel 1 goto :fail
 
 echo.
-echo DONE!  Installer: %~dp0dist\KingAnimatedDesktop_Setup_1.0.0.exe
+echo DONE!  Installer: %~dp0dist\KingAnimatedDesktop_Setup_1.0.1.exe
 explorer "%~dp0dist"
 pause
 exit /b 0

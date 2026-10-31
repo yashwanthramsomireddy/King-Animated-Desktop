@@ -419,6 +419,7 @@ class SettingsDialog(QDialog):
         self.info_icon = QLabel(); self.info_icon.setFixedSize(84, 84); self.info_icon.setAlignment(Qt.AlignCenter)
         cl.addWidget(self.info_icon)
         self.info_head = QLabel(); self.info_head.setTextFormat(Qt.RichText); self.info_head.setWordWrap(True)
+        self.info_head.setOpenExternalLinks(True)
         cl.addWidget(self.info_head, 1); outer.addWidget(card)
 
         dev = QFrame(); dev.setObjectName("card"); dl = QVBoxLayout(dev); dl.setContentsMargins(18, 14, 18, 14)
@@ -428,26 +429,11 @@ class SettingsDialog(QDialog):
         row = QHBoxLayout()
         self.info_buttons = {}
         for key, text, fn in (("website", "Visit website", lambda: self._open_url(AI.WEBSITE)),
-                              ("privacy", "Privacy policy", lambda: self._open_page("privacy-policy.html", AI.PRIVACY_URL)),
-                              ("terms", "Terms of use", lambda: self._open_page("terms-of-service.html", AI.TERMS_URL)),
+                              ("privacy", "Privacy policy", lambda: self._open_url(AI.PRIVACY_REPO_URL)),
+                              ("terms", "Terms of use", lambda: self._open_url(AI.TERMS_REPO_URL)),
                               ("source", "Source code", lambda: self._open_url(AI.REPO_URL))):
             b = QPushButton(text); b.clicked.connect(lambda _=False, f=fn: f()); row.addWidget(b); self.info_buttons[key] = b
         outer.addLayout(row)
-        row = QHBoxLayout()
-        for key, text, fn in (("support", "Email support", self._email_support), ("share", "Share (copy link)", self._copy_repo),
-                              ("licenses", "Licenses && notices", lambda: self._open_doc("THIRD_PARTY_NOTICES.txt"))):
-            b = QPushButton(text); b.clicked.connect(lambda _=False, f=fn: f()); row.addWidget(b); self.info_buttons[key] = b
-        outer.addLayout(row)
-
-        don = QFrame(); don.setObjectName("card"); dl2 = QVBoxLayout(don); dl2.setContentsMargins(18, 14, 18, 14)
-        self.donate_label = QLabel(); self.donate_label.setTextFormat(Qt.RichText); self.donate_label.setWordWrap(True)
-        dl2.addWidget(self.donate_label)
-        drow = QHBoxLayout()
-        for key, text, url in (("paypal", "Donate with PayPal", AI.PAYPAL_URL),
-                               ("razorpay", "Donate with Razorpay (UPI / cards)", AI.RAZORPAY_URL)):
-            b = QPushButton(text); b.setObjectName("donate"); b.setMinimumHeight(38)
-            b.clicked.connect(lambda _=False, u=url: self._open_url(u)); drow.addWidget(b); self.info_buttons[key] = b
-        dl2.addLayout(drow); outer.addWidget(don)
         outer.addStretch(1)
         self._fill_info()
         return page
@@ -460,7 +446,8 @@ class SettingsDialog(QDialog):
         n = len(REGISTRY)
         self.info_head.setText(
             f"<div style='font-size:22px;font-weight:bold;color:{acc}'>{C.APP_NAME}</div>"
-            f"<div style='color:{mut}'>Version {C.VERSION} &middot; {AI.LICENSE_NAME}</div>"
+            f"<div style='color:{mut}'>Version {C.VERSION} &middot; "
+            f"<a style='color:{mut}' href='{AI.LICENSE_URL}'>{AI.LICENSE_NAME}</a></div>"
             f"<p>{AI.APP_TAGLINE}.<br>{n} objects &middot; custom text &middot; "
             f"{len(C.SCHEMA)} global settings &middot; {len(C.PET_SCHEMA)} per object.</p>"
             f"<div style='color:{acc}'>{AI.PLEDGE}</div>")
@@ -469,54 +456,13 @@ class SettingsDialog(QDialog):
             f"<table cellpadding='3'>"
             f"<tr><td style='color:{mut}'>Name</td><td><b>{AI.DEV_NAME}</b> ({AI.DEV_HANDLE})</td></tr>"
             f"<tr><td style='color:{mut}'>Team</td><td><b>{AI.BRAND}</b> &middot; {AI.LOCATION}</td></tr>"
-            f"<tr><td style='color:{mut}'>Email</td><td><a style='color:{acc}' href='mailto:{AI.EMAIL}'>{AI.EMAIL}</a></td></tr>"
             f"<tr><td style='color:{mut}'>Your data</td><td>Stays on this PC: <code>{C.config_path()}</code></td></tr>"
             f"</table>")
-        self.donate_label.setText(
-            f"<div style='font-size:15px;font-weight:bold;color:{acc}'>Support the project</div>"
-            f"<div>{C.APP_NAME} is free forever. If you enjoy it, a voluntary donation helps keep it that way. "
-            f"Donations unlock nothing - everything is already free.</div>")
 
     def _open_url(self, url):
         from PySide6.QtCore import QUrl
         from PySide6.QtGui import QDesktopServices
         return QDesktopServices.openUrl(QUrl(url))
-
-    def _base_dir(self):
-        import os, sys
-        return os.path.dirname(sys.executable) if getattr(sys, "frozen", False) else \
-            os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-    def _open_page(self, name, hosted_url):
-        """Open the policy page bundled with the app (works offline); fall back to the hosted copy."""
-        import os
-        from PySide6.QtCore import QUrl
-        from PySide6.QtGui import QDesktopServices
-        base = self._base_dir()
-        for p in (os.path.join(base, "web", name), os.path.join(base, "web", "king-animated-desktop", name)):
-            if os.path.exists(p):
-                return QDesktopServices.openUrl(QUrl.fromLocalFile(p))
-        return self._open_url(hosted_url)
-
-    def _email_support(self):
-        import datetime
-        from urllib.parse import quote
-        subject = f"{C.APP_NAME} Support/Request - {datetime.datetime.now():%Y-%m-%d %H:%M}"
-        self._open_url(f"mailto:{AI.EMAIL}?subject={quote(subject)}&body={quote('Hi Yashwanth,' + chr(10) + chr(10))}")
-
-    def _copy_repo(self):
-        QApplication.clipboard().setText(AI.REPO_URL)
-        self.status.setText("Link copied to clipboard - share it!")
-
-    def _open_doc(self, name):
-        import os
-        from PySide6.QtCore import QUrl
-        from PySide6.QtGui import QDesktopServices
-        path = os.path.join(self._base_dir(), name)
-        if os.path.exists(path):
-            QDesktopServices.openUrl(QUrl.fromLocalFile(path))
-        else:
-            QMessageBox.information(self, name, f"File not found:\n{path}")
 
     # ───────────── theme ─────────────
     def retheme(self):
@@ -533,8 +479,6 @@ class SettingsDialog(QDialog):
                 self.sel_icon.setPixmap(preview_pixmap(REGISTRY[self.cur], 120))
         if hasattr(self, "info_head"):
             self._fill_info()
-        self.setStyleSheet(f"QPushButton#donate {{ background:{self.colors['accent']}; color:{self.colors['accent_text']};"
-                           f" font-weight:bold; border:none; }} QPushButton#donate:hover {{ color:{self.colors['accent_text']}; }}")
 
     # ───────────── objects: data <-> widgets ─────────────
     def _pet(self, pid):

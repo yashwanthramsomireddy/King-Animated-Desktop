@@ -1,8 +1,8 @@
 ﻿; King Animated Desktop - Inno Setup 6 script
-; Build:  iscc /DAppVersion=1.0.0 installer\KingAnimatedDesktop.iss
+; Build:  iscc /DAppVersion=1.0.1 installer\KingAnimatedDesktop.iss
 ; Prerequisite: dist\KingAnimatedDesktop\ must exist (PyInstaller one-folder build) - see build_windows_installer.bat
 #ifndef AppVersion
-  #define AppVersion "1.0.0"
+  #define AppVersion "1.0.1"
 #endif
 #define AppName "King Animated Desktop"
 #define AppExe  "KingAnimatedDesktop.exe"

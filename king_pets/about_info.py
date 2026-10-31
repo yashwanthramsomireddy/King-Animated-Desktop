@@ -8,10 +8,11 @@ EMAIL = "Yashwanthramsomireddy@gmail.com"
 WEBSITE = "https://teamexykings.in"
 GITHUB_PROFILE = "https://github.com/yashwanthramsomireddy"
 REPO_URL = "https://github.com/yashwanthramsomireddy/king-animated-desktop"
-# Hosted copies of the policy pages (GitHub Pages, in the TeamExyKings repo, same pattern as King Calc).
-PAGES_BASE = "https://yashwanthramsomireddy.github.io/TeamExyKings/king-animated-desktop/"
-PRIVACY_URL = PAGES_BASE + "privacy-policy.html"
-TERMS_URL = PAGES_BASE + "terms-of-service.html"
+# The Info tab links straight to the plain-text files in the repo (not the hosted
+# GitHub Pages site) so there's one source of truth and no bundled-copy/offline fallback to keep in sync.
+PRIVACY_REPO_URL = REPO_URL + "/blob/main/PRIVACY.txt"
+TERMS_REPO_URL = REPO_URL + "/blob/main/TERMS.txt"
+LICENSE_URL = REPO_URL + "/blob/main/LICENSE"
 PAYPAL_URL = "https://www.paypal.me/yash92duster"
 RAZORPAY_URL = "https://rzp.io/rzp/ArAAE3GW"
 LICENSE_NAME = "MIT License"

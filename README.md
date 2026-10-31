@@ -31,7 +31,7 @@
 ## Install (Windows 10 / 11)
 
 ### Option A – Installer (recommended)
-Download **`KingAnimatedDesktop_Setup_x.y.z.exe`** from [Releases](https://github.com/yashwanthramsomireddy/king-animated-desktop/releases), accept the licence, and click through. It installs to `C:\Program Files\King Animated Desktop`, and offers a **desktop shortcut** and **start with Windows** (both ticked by default).
+Download **[`KingAnimatedDesktop_Setup_1.0.0.exe`](https://github.com/yashwanthramsomireddy/king-animated-desktop/releases/download/v1.0.0/KingAnimatedDesktop_Setup_1.0.0.exe)** (all versions: [Releases](https://github.com/yashwanthramsomireddy/king-animated-desktop/releases)), accept the licence, and click through. It installs to `C:\Program Files\King Animated Desktop`, and offers a **desktop shortcut** and **start with Windows** (both ticked by default).
 
 ### Option B – Run from source
 ```bat
@@ -74,9 +74,6 @@ Platform notes: the overlay works on Windows (primary target); it also runs on m
 
 ## Website pages
 `web/king-animated-desktop/` holds the project's `index.html`, `privacy-policy.html` and `terms-of-service.html` (self-contained, no external assets). They are also bundled in the installer so the in-app links work offline.
-
-## Support the project
-Free forever. Optional donations: [PayPal](https://www.paypal.me/yash92duster) · [Razorpay (UPI / cards)](https://rzp.io/rzp/ArAAE3GW).
 
 ## License
 [MIT](LICENSE) © 2026 Yashwanth Ram Somireddy / TeamExyKings

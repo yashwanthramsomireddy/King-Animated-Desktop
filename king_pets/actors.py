@@ -236,6 +236,12 @@ class BadgeActor(OverlayWindow):
         self.cfg = cfg
         self.geo = screen.geometry()
         self.t = 0.0
+        # Built once here and reused by _font() below - the badge's font
+        # never changes after construction (a settings change rebuilds a
+        # fresh BadgeActor entirely), so rebuilding a QFont from its family
+        # name on every single paintEvent (up to 60x/sec) was pure waste.
+        self._cached_font = QFont(cfg["badge_font"] or "Consolas")
+        self._cached_font.setPointSize(cfg["badge_font_size"]); self._cached_font.setBold(cfg["badge_bold"])
         f = self._font()
         fm = QFontMetrics(f)
         self.tw = fm.horizontalAdvance(cfg["badge_text"] or " ")
@@ -253,9 +259,7 @@ class BadgeActor(OverlayWindow):
         self.setWindowOpacity(cfg["global_opacity"])
 
     def _font(self):
-        f = QFont(self.cfg["badge_font"] or "Consolas")
-        f.setPointSize(self.cfg["badge_font_size"]); f.setBold(self.cfg["badge_bold"])
-        return f
+        return self._cached_font
 
     def step(self, dt):
         self.t += dt
@@ -338,6 +342,8 @@ class TextActor(OverlayWindow):
         self.setWindowOpacity(tc["opacity"] * cfg["global_opacity"])
         self.dir = 1
         self.typed = 0.0
+        self._glyph_path_cache_key = None
+        self._glyph_path_cache = None
         self._place()
 
     # base position from the anchor
@@ -458,17 +464,30 @@ class TextActor(OverlayWindow):
         fm = self.fm
         base_y = fm.ascent() - fm.height() / 2
         x0 = -self.tw / 2 + 1
-        path = QPainterPath()
+        fillcol = col
         if an == "wave":
+            # Each glyph's vertical offset depends on self.t, which changes
+            # every frame, so the path geometry itself must be rebuilt here -
+            # it can't be cached like the other animations below.
+            path = QPainterPath()
             x = x0
             for i, ch in enumerate(text):
                 dy = math.sin(self.t * 4 + i * 0.7) * fm.height() * 0.25
                 path.addText(QPointF(x, base_y + dy), self.font_, ch)
                 x += fm.horizontalAdvance(ch)
-            fillcol = col
         else:
-            path.addText(QPointF(x0, base_y), self.font_, text)
-            fillcol = col
+            # Everything else (pulse/float/bounce/shake/spin/blink/rainbow/
+            # none, and typewriter between character reveals) draws the same
+            # glyph outlines every frame - only the QPainter transform or pen
+            # colour changes. Extracting that outline via addText() is the
+            # most expensive part of this paintEvent (called up to 60x/sec
+            # per text object), so cache it and only rebuild when the text
+            # actually changes (e.g. the next character in a typewriter).
+            if text != self._glyph_path_cache_key:
+                self._glyph_path_cache = QPainterPath()
+                self._glyph_path_cache.addText(QPointF(x0, base_y), self.font_, text)
+                self._glyph_path_cache_key = text
+            path = self._glyph_path_cache
         if tc["glow"] and style != "sticker":
             for i in range(tc["glow_strength"], 0, -1):
                 g = QColor(fillcol); g.setAlpha(int(60 / i))

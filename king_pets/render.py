@@ -27,6 +27,17 @@ class Ctx:
         alpha = 1.0
         if isinstance(col, (tuple, list)):
             col, alpha = col
+        # Called for every shape of every visible sprite, every frame (up to
+        # 60x/sec x up to max_active actors) - with the default appearance
+        # (no hue shift, saturation/brightness untouched, not greyscale) the
+        # RGB->HSL->RGB round trip below reconstructs the exact same colour
+        # it started with, just at the cost of the conversion. Skip straight
+        # to QColor when there's nothing to actually adjust.
+        if not self.gray and not self.hue and self.sat == 1.0 and self.bri == 1.0:
+            q = QColor(col)
+            if alpha != 1.0:
+                q.setAlphaF(alpha)
+            return q
         q = QColor(col)
         h, s, l, _ = q.getHslF()
         if h >= 0 and s > 0.02 and self.hue:

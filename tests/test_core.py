@@ -229,3 +229,79 @@ def test_on_foreground_changed_reasserts_only_when_appropriate():
     eng.on_foreground_changed()
     assert calls == [], "always_on_top disabled -> must not reassert"
     eng.clear()
+
+
+def test_badge_font_is_built_once_not_every_paint():
+    cfg = C.sanitize({"badge_enabled": True})
+    scr = app.primaryScreen()
+    b = BadgeActor(cfg, scr)
+    built = b._font()
+    for _ in range(5):
+        img = QImage(b.size(), QImage.Format_ARGB32); img.fill(Qt.transparent)
+        b.render(img)
+        assert b._font() is built, "the badge font must not be rebuilt on every paintEvent"
+
+
+def test_ctx_color_fast_path_is_exact_and_still_adjusts_when_needed():
+    # Ctx.c() is called per shape, per actor, every frame - with default
+    # appearance (no hue shift / saturation / brightness / greyscale change)
+    # it now returns the colour as-is instead of round-tripping it through
+    # HSL for nothing. Must still be a lossless passthrough, and must still
+    # actually adjust the colour the moment any of those settings are used.
+    base = Ctx()  # hue=0, sat=1.0, bri=1.0, gray=False (the defaults)
+    assert base.c("#336699") == QColor("#336699")
+    with_alpha = base.c(("#336699", 0.5))
+    assert with_alpha.red() == QColor("#336699").red()   # exact, not a lossy HSL round-trip
+    assert abs(with_alpha.alphaF() - 0.5) < 1e-3
+
+    shifted = Ctx(hue=180)
+    assert shifted.c("#336699") != QColor("#336699"), "hue shift must still take effect"
+
+    gray = Ctx(gray=True)
+    assert gray.c("#336699").getHslF()[1] == 0.0, "greyscale must still desaturate"
+
+    dim = Ctx(bri=0.5)
+    assert dim.c("#336699") != QColor("#336699"), "brightness adjustment must still take effect"
+
+
+def test_text_glyph_path_is_cached_unless_the_text_changes():
+    from king_pets.engine import Engine
+    cfg = C.sanitize({"texts": [{"enabled": True, "text": "Hi", "animation": "pulse", "style": "pill"}]})
+    eng = Engine(app, cfg)
+    tx = eng.texts[0]
+
+    def render_once():
+        img = QImage(tx.size(), QImage.Format_ARGB32); img.fill(Qt.transparent)
+        tx.render(img)
+
+    render_once()
+    cached = tx._glyph_path_cache
+    assert cached is not None and tx._glyph_path_cache_key == "Hi"
+
+    render_once()
+    assert tx._glyph_path_cache is cached, "same text across frames must reuse the cached path, not rebuild it"
+
+    tx.tc["text"] = "Hi!"          # simulate the text actually changing (e.g. typewriter revealing a character)
+    render_once()
+    assert tx._glyph_path_cache is not cached and tx._glyph_path_cache_key == "Hi!"
+    eng.clear()
+
+
+def test_text_wave_animation_is_not_frozen_by_the_path_cache():
+    # Unlike the other animations, "wave" bakes a per-frame, per-glyph offset
+    # directly into the path geometry, so it must never be served from the
+    # cache above - confirm it still actually animates frame to frame.
+    from king_pets.engine import Engine
+    cfg = C.sanitize({"texts": [{"enabled": True, "text": "Hi", "animation": "wave", "style": "none"}]})
+    eng = Engine(app, cfg)
+    tx = eng.texts[0]
+
+    def snap(t):
+        tx.t = t
+        img = QImage(tx.size(), QImage.Format_ARGB32); img.fill(Qt.transparent)
+        tx.render(img)
+        import hashlib
+        return hashlib.md5(bytes(img.constBits())).hexdigest()
+
+    assert snap(0.0) != snap(0.3), "wave must keep animating, not get stuck on a cached frame"
+    eng.clear()

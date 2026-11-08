@@ -276,12 +276,15 @@ Source: "..\PRIVACY.txt";            DestDir: "{app}"; Flags: ignoreversion
 Source: "..\THIRD_PARTY_NOTICES.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\README.md";              DestDir: "{app}"; Flags: ignoreversion
 Source: "..\licenses\*";             DestDir: "{app}\licenses"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\web\king-animated-desktop\*"; DestDir: "{app}\web\king-animated-desktop"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\index.html";             DestDir: "{app}"; Flags: ignoreversion
+Source: "..\privacy-policy.html";    DestDir: "{app}"; Flags: ignoreversion
+Source: "..\terms-of-service.html";  DestDir: "{app}"; Flags: ignoreversion
+Source: "..\img\*";                  DestDir: "{app}\img"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{autoprograms}\{#AppName}";                          Filename: "{app}\{#AppExe}"; WorkingDir: "{app}"
 Name: "{autoprograms}\{cm:ShortcutSettings}";               Filename: "{app}\{#AppExe}"; Parameters: "--settings"; WorkingDir: "{app}"
-Name: "{autoprograms}\{cm:ShortcutPrivacy}";                Filename: "{app}\web\king-animated-desktop\privacy-policy.html"
+Name: "{autoprograms}\{cm:ShortcutPrivacy}";                Filename: "{app}\privacy-policy.html"
 Name: "{autoprograms}\{cm:ShortcutLicenses}";               Filename: "{app}\THIRD_PARTY_NOTICES.txt"
 Name: "{autoprograms}\{cm:ShortcutUninstall}";              Filename: "{uninstallexe}"
 Name: "{autodesktop}\{#AppName}";                           Filename: "{app}\{#AppExe}"; WorkingDir: "{app}"; Tasks: desktopicon

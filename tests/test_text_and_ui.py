@@ -405,13 +405,12 @@ def test_privacy_and_terms_open_the_repo_files(dlg):
 
 def test_donate_and_legal_texts_mention_what_they_must():
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    for f in ("web/king-animated-desktop/index.html", "web/king-animated-desktop/privacy-policy.html",
-              "web/king-animated-desktop/terms-of-service.html"):
+    for f in ("index.html", "privacy-policy.html", "terms-of-service.html"):
         s = open(os.path.join(root, f), encoding="utf-8").read()
         assert "<title>" in s and "King Animated Desktop" in s, f
-    idx = open(os.path.join(root, "web/king-animated-desktop/index.html"), encoding="utf-8").read()
+    idx = open(os.path.join(root, "index.html"), encoding="utf-8").read()
     assert AI.PAYPAL_URL in idx and AI.RAZORPAY_URL in idx and AI.REPO_URL in idx
-    priv = open(os.path.join(root, "web/king-animated-desktop/privacy-policy.html"), encoding="utf-8").read()
+    priv = open(os.path.join(root, "privacy-policy.html"), encoding="utf-8").read()
     assert "GDPR" in priv and AI.EMAIL in priv and "PayPal" in priv and "Razorpay" in priv
-    terms = open(os.path.join(root, "web/king-animated-desktop/terms-of-service.html"), encoding="utf-8").read()
+    terms = open(os.path.join(root, "terms-of-service.html"), encoding="utf-8").read()
     assert "MIT" in terms and "donation" in terms.lower()

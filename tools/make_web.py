@@ -1,10 +1,10 @@
-"""Generates web/king-animated-desktop/{index,privacy-policy,terms-of-service}.html (self-contained, no external requests).
-Copy the whole folder into your TeamExyKings GitHub Pages repo.  Run: python tools/make_web.py"""
+"""Generates {index,privacy-policy,terms-of-service}.html (self-contained, no external requests)
+at the repo root, alongside the img/ folder the installer bundles. Run: python tools/make_web.py"""
 import os, sys, html, shutil
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 from king_pets import about_info as AI, config as C
-OUT = os.path.join(ROOT, "web", "king-animated-desktop")
+OUT = ROOT
 os.makedirs(os.path.join(OUT, "img"), exist_ok=True)
 for f in ("gallery.png", "settings.png", "settings_white.png", "settings_text.png", "demo.gif"):
     src = os.path.join(ROOT, "docs", f)
